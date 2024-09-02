@@ -7,6 +7,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.List;
@@ -42,12 +43,15 @@ public class HttpServletResponseImpl implements HttpServletResponse {
 
     @Override
     public void sendError(int i, String s) throws IOException {
-
+        this.httpExchangeResponse.sendResponseHeaders(i, 0);
+        OutputStream outputStream = this.httpExchangeResponse.getResponseBody();
+        outputStream.write(s.getBytes());
+        outputStream.flush();
     }
 
     @Override
     public void sendError(int i) throws IOException {
-
+        sendError(i, "");
     }
 
     @Override
